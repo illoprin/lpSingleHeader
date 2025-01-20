@@ -22,10 +22,10 @@
 #define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
 #define LP_LOG_ERR(text) \
-	printf(BLUE "Dynarr Lib" RESET " - " BOLDRED text RESET " at " CYAN __FILE__ ":%d" RESET "\n", __LINE__)
+	printf(BLUE "LpSingleHeader" RESET " - " BOLDRED text RESET " at " CYAN __FILE__ ":%d" RESET "\n", __LINE__)
 
 #define LP_LOG_MSG(text, ...) \
-	printf(BLUE "Dynarr Lib" RESET " - " BOLDMAGENTA text RESET "\n", __VA_ARGS__) \
+	printf(BLUE "LpSingleHeader" RESET " - " BOLDMAGENTA text RESET "\n", __VA_ARGS__) \
 
 
 #endif // __LP_COMMON_H__

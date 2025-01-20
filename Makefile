@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-std=c99 -Wall -DDYNARR_DEBUG
 INCLUDE=-I include
-LDFLAGS=
+LDFLAGS=-lm
 
 TARGET=app
 OBJ_DIR=obj
