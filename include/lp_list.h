@@ -23,14 +23,74 @@ typedef struct llist_t {
 	size_t length;
 } llist;
 
-
-
-#ifdef LP_LIST_IMPLEMENTATION
-
 /*
 	Allocates memory for new node and its data
 	Copies data from source location to node data
 */
+llist_node* llist_node_alloc(void* data, size_t data_size);
+
+/*
+	Releases node and node data memory
+*/
+void llist_node_free(llist_node* node);
+
+/*
+	Create new linked list
+	Allocates memory for new list and inits that
+*/
+llist* llist_init();
+
+/*
+	Allocates memory for new node and pushes it to the end of list
+*/
+void llist_push_back(llist* l, void* data, size_t elem_size);
+
+/*
+	Allocates memory for new node and pushes it to the begin of list
+*/
+void llist_push_front(llist* l, void* data, size_t elem_size);
+
+/// @brief Creates new node and pushes that after 'index' position
+/// @param index index of element after which new node should be inserted
+void llist_push_after(llist* l, size_t index, void* data, size_t elem_size);
+
+/*
+	Deletes last element of list
+*/
+void llist_pop_back(llist* l);
+void llist_pop_front(llist* l);
+
+/// @brief Deletes element with 'index'
+/// @param index index of element that should to be deleted
+void llist_pop_at(llist* l, size_t index);
+
+/*
+	Replace data of element with 'index',
+	if elem_size != node->__elem_size -> deletes old data and allocates new memory
+	for new data entry
+*/
+void llist_replace_at(llist* l, void* data, size_t elem_size, size_t index);
+
+/*
+	Get data of node with 'index'
+*/
+void llist_at(llist* l, void* data, size_t elem_size, size_t index);
+
+/*
+	Deletes all nodes of list
+*/
+void llist_clear(llist* l);
+
+/*
+	Deletes nodes of list and
+	releases memory that was occupied by list
+*/
+void llist_release(llist* l);
+
+
+#ifdef LP_LIST_IMPLEMENTATION
+
+
 llist_node* llist_node_alloc(void* data, size_t data_size)
 {
 	// Allocate memory for node
@@ -56,9 +116,6 @@ llist_node* llist_node_alloc(void* data, size_t data_size)
 	return node;
 };
 
-/*
-	Releases node and node data memory
-*/
 void llist_node_free(llist_node* node)
 {
 	if (node)
@@ -69,10 +126,7 @@ void llist_node_free(llist_node* node)
 	}
 };
 
-/*
-	Create new linked list
-	Allocates memory for new list and inits that
-*/
+
 llist* llist_init()
 {
 	llist* l = (llist*)malloc(sizeof(llist));
@@ -90,9 +144,6 @@ llist* llist_init()
 	return l;
 };
 
-/*
-	Allocates memory for new node and pushes it to the end of list
-*/
 void llist_push_back(llist* l, void* data, size_t elem_size)
 {
 	llist_node* node = llist_node_alloc(data, elem_size);
@@ -112,9 +163,6 @@ void llist_push_back(llist* l, void* data, size_t elem_size)
 	l->length++;
 };
 
-/*
-	Allocates memory for new node and pushes it to the begin of list
-*/
 void llist_push_front(llist* l, void* data, size_t elem_size)
 {
 	llist_node* node = llist_node_alloc(data, elem_size);
@@ -128,10 +176,6 @@ void llist_push_front(llist* l, void* data, size_t elem_size)
 	l->length++;
 };
 
-
-/// @brief Allocates memory for new node
-///        and pushes it after the the element with 'index'
-/// @param index index of element after which the new node should be pushed
 void llist_push_after(llist* l, size_t index, void* data, size_t elem_size)
 {
 	// If index >= length - push back
@@ -156,9 +200,6 @@ void llist_push_after(llist* l, size_t index, void* data, size_t elem_size)
 	l->length++;
 };
 
-/*
-	Deletes last element of list
-*/
 void llist_pop_back(llist* l)
 {
 	// Node to delete
@@ -217,8 +258,7 @@ void llist_pop_front(llist* l)
 	l->length--;
 };
 
-/// @brief Deletes element with 'index'
-/// @param index index of element that should to be deleted
+
 void llist_pop_at(llist* l, size_t index)
 {
 	if (l->length == 0)
@@ -258,11 +298,6 @@ void llist_pop_at(llist* l, size_t index)
 	l->length--;
 };
 
-/*
-	Replace data of element with 'index',
-	if elem_size != node->__elem_size -> deletes old data and allocates new memory
-	for new data entry
-*/
 void llist_replace_at(llist* l, void* data, size_t elem_size, size_t index)
 {
 	if (l->length == 0)
@@ -305,9 +340,6 @@ void llist_replace_at(llist* l, void* data, size_t elem_size, size_t index)
 };
 
 
-/*
-	Get data of node with 'index'
-*/
 void llist_at(llist* l, void* data, size_t elem_size, size_t index)
 {
 	if (l->length == 0)
@@ -339,20 +371,14 @@ void llist_at(llist* l, void* data, size_t elem_size, size_t index)
 	{
 		LP_LOG_ERR("Node has not any data");
 	}
-};
+}
 
-
-/*
-	Deletes nodes of list and
-	releases memory that was occupied by list
-*/
-void llist_release(llist* l)
+void llist_clear(llist *l)
 {
 	if (l)
 	{
 		if (l->length > 0)
 		{
-			// Release elements
 
 			// Node to delete
 			llist_node* node = l->first;
@@ -360,13 +386,27 @@ void llist_release(llist* l)
 			// Next node from the one to be deleted
 			llist_node* nnode;
 
+			// Release all nodes
 			while (node)
 			{
 				nnode = node->next;
 				llist_node_free(node);
 				node = nnode;
-			}
+			};
+
+			// Update list variables
+			l->length = 0;
+			l->first = NULL;
+			l->last = NULL;
 		}
+	}
+};
+
+void llist_release(llist* l)
+{
+	if (l)
+	{
+		llist_clear(l);
 
 		// Release list
 		free(l);
