@@ -76,16 +76,12 @@ void struct_test(size_t len)
 	{
 		some_struct_t ival = {};
 		dynarr_at(arr, (void*)&ival, i);
-		some_struct_print(&ival);
 	}
 
 	for (int i = 0; i < arr->length; ++i)
 	{
 		some_struct_t ival = dynarr_value_at(arr, some_struct_t, i);
-		some_struct_print(&ival);
 	}
-
-	getchar();
 
 	dynarr_release(arr);
 }
@@ -114,6 +110,7 @@ void replace_test(size_t len)
 		dynarr_replace(arr, (void *)&val, (size_t)i);
 	}
 
+
 	putchar('\n');
 
 	// Print values
@@ -128,8 +125,8 @@ int main(void)
 {
 	srand(47384);
 
-	// simple_test(10);
-	// struct_test(20000);
+	simple_test(10);
+	struct_test(20000);
 	replace_test(60);
 
 	return 0;

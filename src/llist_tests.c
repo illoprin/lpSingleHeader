@@ -244,6 +244,8 @@ int main()
 
 	start = clock();
 	each_other_test(40000);
+	stress_test();
+	simple_test();
 	end = clock();
 
 	printf(BOLDBLUE "Elapsed total: " BOLDRED "%4.2f ms\n" RESET, get_elapsed_time(start, end));

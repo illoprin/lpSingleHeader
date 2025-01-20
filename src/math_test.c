@@ -24,6 +24,7 @@ int main()
 
 	lp_lines_intersection_point(a1, a2, b1, b2, &i, &intersects);
 
+
 	if (intersects)
 		printf("X: %.5f Y: %.5f\n", i.x, i.y);
 

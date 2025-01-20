@@ -33,10 +33,10 @@ void dynarr_release(dynarr_t* arr);
 		Returns a typed value from the data memory location of array.
 		If out of range, or another error - returns first element
 */
-#define dynarr_value_at(array, type, index) \
+#define dynarr_value_at(array, type, index)                                         \
 	(index) >= 0 && (index) < array->length && sizeof(type) == array->__elem_size ? \
-	*( (type*)((char *)array->data + (index) * array->__elem_size) ) : \
-	(LP_LOG_ERR("Out of range"), *( (type*)array->data )) \
+	*( (type*)((char *)array->data + (index) * array->__elem_size) ) :              \
+	(LP_LOG_ERR("Out of range"), *( (type*)array->data ))                           \
 
 #define dynarr_init(type) \
 	__dynarr_init(sizeof(type)) \

@@ -1,10 +1,10 @@
-CC=cc
-CFLAGS=-std=c99
+CC=clang
+CFLAGS=-std=c99 -Wall -fsanitize=address
 LDFLAGS=-lm
 INCLUDE=-I include
 
 SRC?=llist_tests.c
-TARGET=out
+TARGET=a.out
 
 all: $(TARGET)
 	./$<

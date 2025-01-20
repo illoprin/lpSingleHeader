@@ -170,7 +170,7 @@ inline float lp_vec2_dot(vec2_t* v1, vec2_t* v2);
 
 float lpr_clamped_real()
 {
-	return (float)rand() / RAND_MAX;
+	return (float)rand() / (float)RAND_MAX;
 };
 int lpr_integer_uniform(int min, int max)
 {
