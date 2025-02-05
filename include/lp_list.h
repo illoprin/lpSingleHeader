@@ -13,14 +13,14 @@
 
 typedef struct llist_node_t {
 	struct llist_node_t* next;
-	void* data;
-	size_t __elem_size;
+	void*                data;
+	size_t               __elem_size;
 } llist_node;
 
 typedef struct llist_t {
 	llist_node* first;
 	llist_node* last;
-	size_t length;
+	size_t      length;
 } llist;
 
 /*
@@ -137,8 +137,8 @@ llist* llist_init()
 		return NULL;
 	}
 
-	l->first = NULL;
-	l->last = NULL;
+	l->first  = NULL;
+	l->last   = NULL;
 	l->length = 0;
 
 	return l;
@@ -171,7 +171,7 @@ void llist_push_front(llist* l, void* data, size_t elem_size)
 
 	// Update pointers
 	node->next = l->first;
-	l->first = node;
+	l->first   = node;
 
 	l->length++;
 };
@@ -211,7 +211,7 @@ void llist_pop_back(llist* l)
 		node = l->first;
 		llist_node_free(node);
 		l->first = NULL;
-		l->last = NULL;
+		l->last  = NULL;
 		l->length--;
 		return;
 	}
@@ -248,7 +248,7 @@ void llist_pop_front(llist* l)
 		node = l->first;
 		llist_node_free(node);
 		l->first = NULL;
-		l->last = NULL;
+		l->last  = NULL;
 		l->length--;
 		return;
 	}
@@ -396,8 +396,8 @@ void llist_clear(llist *l)
 
 			// Update list variables
 			l->length = 0;
-			l->first = NULL;
-			l->last = NULL;
+			l->first  = NULL;
+			l->last   = NULL;
 		}
 	}
 };

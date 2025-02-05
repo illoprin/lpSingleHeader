@@ -11,37 +11,37 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DYNARR_INITIAL_CAPACITY 8
-
 typedef struct dynarr {
-	void* data;
-
+	void*  data;
 	size_t capacity;
 	size_t length;
 	size_t __elem_size;
 } dynarr_t;
 
 dynarr_t* __dynarr_init(size_t elem_size);
-void dynarr_reserve(dynarr_t* arr, size_t elem_to_reserve);
-void dynarr_add(dynarr_t* arr, void* elem);
-void dynarr_replace(dynarr_t* arr, void* data, size_t index);
-void dynarr_at(dynarr_t* arr, void* dest, size_t index);
-void dynarr_release(dynarr_t* arr);
+void      dynarr_reserve(dynarr_t* arr, size_t elem_to_reserve);
+void      dynarr_add(dynarr_t* arr, void* elem);
+void      dynarr_replace(dynarr_t* arr, void* data, size_t index);
+void      dynarr_at(dynarr_t* arr, void* dest, size_t index);
+void      dynarr_release(dynarr_t* arr);
 
 /*
 	EXPERIMENTAL:
 		Returns a typed value from the data memory location of array.
 		If out of range, or another error - returns first element
 */
-#define dynarr_value_at(array, type, index)                                         \
-	(index) >= 0 && (index) < array->length && sizeof(type) == array->__elem_size ? \
-	*( (type*)((char *)array->data + (index) * array->__elem_size) ) :              \
-	(LP_LOG_ERR("Out of range"), *( (type*)array->data ))                           \
+#define dynarr_value_at(array, type, index)                               \
+	(index) >= 0 && (index) < array->length                       &&      \
+	sizeof(type) == array->__elem_size                            ?       \
+	*((type*)((char*)array->data + (index) * array->__elem_size)) :       \
+	(LP_LOG_ERR("Out of range"), *((type*)array->data))
 
 #define dynarr_init(type) \
 	__dynarr_init(sizeof(type)) \
 
 #ifdef LP_DYNARR_IMPLEMENTATION
+
+#define DYNARR_INITIAL_CAPACITY 4
 
 dynarr_t* __dynarr_init(size_t elem_size)
 {
@@ -52,8 +52,8 @@ dynarr_t* __dynarr_init(size_t elem_size)
 		LP_LOG_ERR("Could not allocate memory for array");
 		abort();
 	}
-	arr->length = 0;
-	arr->capacity = DYNARR_INITIAL_CAPACITY;
+	arr->length      = 0;
+	arr->capacity    = DYNARR_INITIAL_CAPACITY;
 	arr->__elem_size = elem_size;
 
 	// Allocate memory for data
@@ -84,7 +84,8 @@ void dynarr_reserve(dynarr_t* arr, size_t elem_to_reserve)
 				return;
 			}
 			#ifdef DYNARR_DEBUG
-				LP_LOG_MSG("Reallocate from %lu to %lu elements", arr->capacity, elem_to_reserve);
+					LP_LOG_MSG("Reallocate from %lu to %lu elements",
+							   arr->capacity, elem_to_reserve);
 			#endif
 		}
 		else
@@ -116,9 +117,11 @@ void dynarr_add(dynarr_t* arr, void* elem)
 			#endif
 		};
 
-		memcpy((char*)arr->data + arr->length * arr->__elem_size, elem, arr->__elem_size);
-		
-		#ifdef LP_DEBUG
+		memcpy((char*)arr->data + arr->length * arr->__elem_size,
+		       elem,
+		       arr->__elem_size);
+
+	    #ifdef LP_DEBUG
 			LP_LOG_MSG("Pushed element to index %lu", arr->length);
 		#endif
 		arr->length++;
@@ -135,7 +138,9 @@ void dynarr_replace(dynarr_t* arr, void* data, size_t index)
 	{
 		if (index >= 0 && index < arr->length)
 		{
-			memcpy((char *)arr->data + index * arr->__elem_size, (char *)data, arr->__elem_size);
+			memcpy((char*)arr->data + index * arr->__elem_size,
+			       (char*)data,
+			       arr->__elem_size);
 		}
 		else
 		{
@@ -156,7 +161,9 @@ void dynarr_at(dynarr_t* arr, void* dest, size_t index)
 		{
 			// Check indices correction
 			if (index >= 0 && index < arr->length)
-				memcpy((char *)dest, (char *)arr->data + index * arr->__elem_size, arr->__elem_size);
+				memcpy((char*)dest,
+				       (char*)arr->data + index * arr->__elem_size,
+				       arr->__elem_size);
 			else
 			{
 				memset(dest, 0, arr->__elem_size);
